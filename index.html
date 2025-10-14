@@ -1,0 +1,224 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>台灣休假日行事曆</title>
+    <link rel="stylesheet" href="./HolidayIndex.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="container">
+        <!-- 標題區域 -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                        <line x1="16" y1="2" x2="16" y2="6" />
+                        <line x1="8" y1="2" x2="8" y2="6" />
+                        <line x1="3" y1="10" x2="21" y2="10" />
+                    </svg>
+                    <h1>台灣休假日行事曆</h1>
+                </div>
+                <p class="subtitle">查詢台灣國定假日與重要節日</p>
+            </div>
+        </header>
+
+        <!-- 搜尋和控制區域 -->
+        <section class="controls">
+            <div class="search-container">
+                <div class="search-box">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="m21 21-4.35-4.35" />
+                    </svg>
+                    <input type="text" id="searchInput" placeholder="搜尋節日名稱...">
+                </div>
+                <div class="year-selector">
+                    <button id="prevYear" class="nav-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15,18 9,12 15,6" />
+                        </svg>
+                    </button>
+                    <span id="currentYear" class="year-display">2024</span>
+                    <button id="nextYear" class="nav-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9,18 15,12 9,6" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 統計資訊 -->
+        <section class="stats">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12,6 12,12 16,14" />
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-number" id="totalHolidays">0</span>
+                    <span class="stat-label">總休假日數</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 11H5a2 2 0 0 0-2 2v3c0 1.1.9 2 2 2h4m0-7v7m0-7h6m-6 0V9a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" />
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-number" id="nationalHolidays">0</span>
+                    <span class="stat-label">國定假日</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-number" id="traditionalHolidays">0</span>
+                    <span class="stat-label">傳統節日</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                        <line x1="16" y1="2" x2="16" y2="6" />
+                        <line x1="8" y1="2" x2="8" y2="6" />
+                        <line x1="3" y1="10" x2="21" y2="10" />
+                        <path d="M8 14h.01M12 14h.01M16 14h.01" />
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-number" id="weekendHolidays">0</span>
+                    <span class="stat-label">例假日</span>
+                </div>
+            </div>
+            <div class="stat-card duty-card">
+                <div class="stat-icon duty-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        <path d="M12 8v4l3 3" />
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-number" id="dutyHolidays">0</span>
+                    <span class="stat-label">值班日</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 載入指示器 -->
+        <div id="loadingIndicator" class="loading-indicator hidden">
+            <div class="loading-spinner"></div>
+            <p>正在載入假日資料...</p>
+        </div>
+
+        <!-- 錯誤訊息 -->
+        <div id="errorMessage" class="error-message hidden">
+            <div class="error-content">
+                <svg class="error-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                <span class="error-text"></span>
+            </div>
+        </div>
+
+        <!-- 行事曆區域 -->
+        <main class="calendar-container">
+            <div class="calendar-header">
+                <h2 id="calendarTitle">2024年行事曆</h2>
+                <div class="view-controls">
+                    <div class="view-toggle">
+                        <button id="monthView" class="toggle-btn active">月份檢視</button>
+                        <button id="listView" class="toggle-btn">列表檢視</button>
+                        <button id="dutyView" class="toggle-btn">值班日檢視</button>
+                    </div>
+                    <div class="weekend-toggle">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="showWeekends" checked>
+                            <span class="slider"></span>
+                            <span class="toggle-label">顯示例假日</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 月份檢視 -->
+            <div id="monthCalendar" class="calendar month-view">
+                <!-- 動態生成月份行事曆 -->
+            </div>
+
+            <!-- 列表檢視 -->
+            <div id="listCalendar" class="calendar list-view hidden">
+                <!-- 動態生成列表 -->
+            </div>
+
+            <!-- 值班日檢視 -->
+            <div id="dutyCalendar" class="calendar duty-view hidden">
+                <div class="duty-summary">
+                    <h3>值班日總覽</h3>
+                    <p>根據您的值班規則「每經過4個休假日，下個休假日就要值班」，以下是所有需要值班的日期：</p>
+                    <p><small>注意：當國定假日和例假日重疊時，只算作一個休假日。</small></p>
+                </div>
+                <div id="dutyList" class="duty-list">
+                    <!-- 動態生成值班日列表 -->
+                </div>
+            </div>
+        </main>
+
+        <!-- 節日詳情彈窗 -->
+        <div id="holidayModal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">節日詳情</h3>
+                    <button id="closeModal" class="close-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="holiday-detail">
+                        <div class="detail-item">
+                            <span class="detail-label">日期：</span>
+                            <span id="modalDate" class="detail-value"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">類型：</span>
+                            <span id="modalType" class="detail-value"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">說明：</span>
+                            <span id="modalDescription" class="detail-value"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 背景裝飾 -->
+    <div class="background-decoration">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+    </div>
+
+    <script src="./HolidayIndex.js"></script>
+</body>
+</html>
+
+
