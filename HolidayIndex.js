@@ -185,7 +185,8 @@ async function getAllHolidays(year) {
 const customDutyDays = {
     '2024-12-28': { isDuty: true, dutySequence: 1, note: '指定值班日' },
     '2025-10-12': { isDuty: true, dutySequence: 1, note: '指定值班日' },
-    '2026-01-01': { isDuty: true, dutySequence: 1, note: '指定值班日' }
+    '2026-01-01': { isDuty: true, dutySequence: 1, note: '指定值班日' },
+	'2027-01-01': { isDuty: true, dutySequence: 1, note: '指定值班日' }
 };
 
 // 計算值班日期
