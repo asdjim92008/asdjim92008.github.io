@@ -87,7 +87,7 @@ async function fetchTaiwanHolidays(year) {
             data = taiwanHolidaysCache[year];
         }
         else {
-            holiday_data = GetHoliday(year);
+            holiday_data = await GetHoliday(year);
             
 
             // 轉換 API 資料格式為我們需要的格式
