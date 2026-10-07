@@ -38,16 +38,25 @@ const API_BASE_URL = 'https://api.pin-yi.me/taiwan-calendar';
 let holiday_data = [];
 
 async function GetHoliday(year) {
-    const response = await fetch(`${API_BASE_URL}/${year}`);
+    try {
+        const response = await fetch(`./${year}.json`);
 
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
         }
 
         const data = await response.json();
-	console.log(data);
 
-    if(year === 2024){
+        taiwanHolidaysCache[year] = data;
+
+        return data;
+
+    } catch (error) {
+        console.error(`讀取 ${year} 假日資料失敗`, error);
+        return [];
+    }
+
+    /*if(year === 2024){
 		return year_2024;
 	}
 	else if(year === 2025){
@@ -61,7 +70,7 @@ async function GetHoliday(year) {
 	}
 	else{
 		return [];
-	}
+	}*/
 }
 
 // 從 API 取得台灣休假日資料
