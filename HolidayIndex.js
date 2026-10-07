@@ -37,8 +37,15 @@ const API_BASE_URL = 'https://api.pin-yi.me/taiwan-calendar';
 // 使用 jQuery 的 AJAX 方法從本地 API 取得假日資料（如果需要）
 let holiday_data = [];
 
-function GetHoliday(year) {
-    
+async function GetHoliday(year) {
+    const response = await fetch(`${API_BASE_URL}/${year}`);
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+	console.log(data);
 
     if(year === 2024){
 		return year_2024;
